@@ -22,6 +22,7 @@
     <ClCompile Include="src\components\asteroid.c" />
     <ClCompile Include="src\components\bullet.c" />
     <ClCompile Include="src\components\player.c" />
+    <ClCompile Include="src\components\window.c" />
     <ClCompile Include="src\main.c" />
     <ClCompile Include="src\Update.c" />
   </ItemGroup>
@@ -29,6 +30,7 @@
     <ClInclude Include="include\components\asteroid.h" />
     <ClInclude Include="include\components\bullet.h" />
     <ClInclude Include="include\components\player.h" />
+    <ClInclude Include="include\components\window.h" />
     <ClInclude Include="include\Update.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -138,12 +140,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)libraries\include;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)libraries\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>csfml-graphics.lib;csfml-main.lib;csfml-system.lib;csfml-audio.lib;csfml-window.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

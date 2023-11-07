@@ -1,0 +1,14 @@
+﻿  asteroid.c
+  bullet.c
+  player.c
+  window.c
+  main.c
+  Update.c
+E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\src\Update.c(20,14): warning C4013: 'rand' undefined; assuming extern returning int
+E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\src\Update.c(90,57): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\src\Update.c(90,66): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 7 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  SPOYO2.vcxproj -> E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\x64\Release\Q3_Asteroid.exe
