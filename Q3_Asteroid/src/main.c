@@ -4,6 +4,8 @@
 #include <math.h>
 #include <SFML/Graphics.h>
 
+#include "components/game.h"
+
 /*float delta = 0;
 sfClock* deltaclock;
 int Delta() {
@@ -24,57 +26,6 @@ int Delta() {
     font1 = sfFont_createFromFile("Font/RetroGaming.ttf");
 }*/
 
-void InitWindow(sfRenderWindow** window) {
-    int windowWidth = sfVideoMode_getDesktopMode().width / 2;
-    int windowHeight = sfVideoMode_getDesktopMode().height / 2;
-    // Window initialization
-    sfVideoMode mode = { windowWidth, windowHeight, 32 };
-    *window = sfRenderWindow_create(mode, "Asteroid", sfClose, NULL);
-
-    if (!*window) {
-        // Failure management
-        exit(EXIT_FAILURE);
-    }
-}
-void InitGame(sfRenderWindow** window) {
-    InitWindow(window);
-}
-
-
-
-void Game(sfRenderWindow* window) {
-    // Main game loop
-    while (sfRenderWindow_isOpen(window)) {
-        sfEvent event;
-        while (sfRenderWindow_pollEvent(window, &event)) {
-            if (event.type == sfEvtClosed) {
-                sfRenderWindow_close(window);
-            }
-        }
-
-        // Game update logic
-        if (sfKeyboard_isKeyPressed(sfKeyEscape)) { sfRenderWindow_close(window); } // quit
-            //UpdateLogic();
-
-        // Clear screen
-        sfRenderWindow_clear(window, sfTransparent);
-
-        // Draw your elements
-            //UpdateDraw();
-        
-        // Display screen
-        sfRenderWindow_display(window);
-    }
-}
-
-
-void ReleaseWindow(sfRenderWindow* window) {
-    sfRenderWindow_destroy(window);
-}
-void ReleaseResources(sfRenderWindow* window) {
-    // Liberating resources
-    ReleaseWindow(window);
-}
 
 
 int main() {
@@ -85,7 +36,7 @@ int main() {
 
     Game(window);
 
-    ReleaseResources(window);
+    DestroyResources(window);
 
     return 0;
 }

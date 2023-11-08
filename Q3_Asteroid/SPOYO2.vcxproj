@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="src\components\asteroid.c" />
     <ClCompile Include="src\components\bullet.c" />
+    <ClCompile Include="src\components\game.c" />
     <ClCompile Include="src\components\player.c" />
     <ClCompile Include="src\components\window.c" />
     <ClCompile Include="src\main.c" />
@@ -29,6 +30,7 @@
   <ItemGroup>
     <ClInclude Include="include\components\asteroid.h" />
     <ClInclude Include="include\components\bullet.h" />
+    <ClInclude Include="include\components\game.h" />
     <ClInclude Include="include\components\player.h" />
     <ClInclude Include="include\components\window.h" />
     <ClInclude Include="include\Update.h" />
