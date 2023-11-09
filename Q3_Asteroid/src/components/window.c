@@ -3,7 +3,7 @@
 #include "components/window.h"
 
 
-void InitWindow(sfRenderWindow** window) {
+void WindowInit(sfRenderWindow** window) {
     int windowWidth = sfVideoMode_getDesktopMode().width / 2;
     int windowHeight = sfVideoMode_getDesktopMode().height / 2;
     // Window initialization
@@ -16,6 +16,10 @@ void InitWindow(sfRenderWindow** window) {
     }
 }
 
-void DestroyWindow(sfRenderWindow* window) {
+void WindowDisplay(sfRenderWindow* window) {
+    sfRenderWindow_display(window);
+}
+
+void WindowDestroy(sfRenderWindow* window) {
     sfRenderWindow_destroy(window);
 }

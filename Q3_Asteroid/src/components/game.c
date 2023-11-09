@@ -1,19 +1,38 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "components/window.h"
 #include "components/game.h"
+#include "components/window.h"
+#include "components/player.h"
 
 
-void InitGame(sfRenderWindow** window) {
-    InitWindow(window);
+void GameInit(sfRenderWindow** window, sfSprite** ship, sfTexture** shipTexture, float* shipRotation) {
+    WindowInit(window);
+    PlayerInit(window, ship, shipTexture, shipRotation);
 }
 
-void DestroyResources(sfRenderWindow* window) {
+void GameUpdate(sfRenderWindow* window, sfSprite* ship, sfTexture* shipTexture, float shipRotation) {
+    PlayerUpdate(window, ship, shipRotation);
+}
+
+void GameDisplay(sfRenderWindow* window, sfSprite* ship, sfTexture* shipTexture) {
+    
+    sfRenderWindow_clear(window, sfTransparent);
+
+    PlayerDisplay(window, ship);
+    
+    WindowDisplay(window);
+}
+
+void DestroyResources(sfRenderWindow* window, sfSprite* ship, sfTexture* shipTexture) {
     // Liberating resources
-    DestroyWindow(window);
+    
+
+    PlayerDestroy(ship, shipTexture);
+
+    WindowDestroy(window);
 }
 
-void Game(sfRenderWindow* window) {
+void Game(sfRenderWindow* window, sfSprite* ship, sfTexture* shipTexture, float shipRotation) {
     // Main game loop
     while (sfRenderWindow_isOpen(window)) {
         sfEvent event;
@@ -23,17 +42,8 @@ void Game(sfRenderWindow* window) {
             }
         }
 
-        // Game update logic
-        if (sfKeyboard_isKeyPressed(sfKeyEscape)) { sfRenderWindow_close(window); } // quit
-        //UpdateLogic();
+        GameUpdate(window, ship, shipTexture, shipRotation, shipRotation);
 
-        // Clear screen
-        sfRenderWindow_clear(window, sfTransparent);
-
-        // Draw your elements
-            //UpdateDraw();
-
-        // Display screen
-        sfRenderWindow_display(window);
+        GameDisplay(window, ship, shipTexture);        
     }
 }

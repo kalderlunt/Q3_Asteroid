@@ -3,10 +3,14 @@
 
 #include <SFML/Graphics.h>
 
-void InitGame(sfRenderWindow** window);
+void GameInit(sfRenderWindow** window, sfSprite** ship, sfTexture** shipTexture, float* shipRotation);
 
-void DestroyResources(sfRenderWindow* window);
+void GameUpdate(sfRenderWindow* window, sfSprite* ship, sfTexture* shipTexture, float shipRotation);
 
-void Game(sfRenderWindow* window);
+void GameDisplay(sfRenderWindow* window, sfSprite* ship, sfTexture* shipTexture);
+
+void DestroyResources(sfRenderWindow* window, sfSprite* ship, sfTexture* shipTexture);
+
+void Game(sfRenderWindow* window, sfSprite* ship, sfTexture* shipTexture, float shipRotation);
 
 #endif /*GAME_H*/

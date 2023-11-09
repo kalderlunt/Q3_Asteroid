@@ -32,11 +32,15 @@ int main() {
 
     sfRenderWindow* window = NULL;
 
-    InitGame(&window);
+    sfSprite* ship = NULL;
+    sfTexture* shipTexture = NULL;
+    float shipRotation = 0.0f;
 
-    Game(window);
+    GameInit(&window, &ship, &shipTexture, &shipRotation);
 
-    DestroyResources(window);
+    Game(window, ship, shipTexture, shipRotation);
+    
+    DestroyResources(window, ship, shipTexture);
 
     return 0;
 }
