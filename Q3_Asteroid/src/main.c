@@ -29,18 +29,21 @@ int Delta() {
 
 
 int main() {
+    srand(time(0));
 
     sfRenderWindow* window = NULL;
+    
+    sfClock* deltaClock;
 
     sfSprite* ship = NULL;
     sfTexture* shipTexture = NULL;
     float shipRotation = 0.0f;
 
-    GameInit(&window, &ship, &shipTexture, &shipRotation);
+    GameInit(&window, &deltaClock, &ship, &shipTexture, &shipRotation);
 
-    Game(window, ship, shipTexture, shipRotation);
+    Game(window, deltaClock, ship, shipTexture, shipRotation);
     
-    DestroyResources(window, ship, shipTexture);
+    DestroyResources(window, deltaClock, ship, shipTexture);
 
     return 0;
 }

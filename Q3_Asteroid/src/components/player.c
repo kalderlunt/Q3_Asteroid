@@ -2,10 +2,20 @@
 #include <stdlib.h>
 #include <math.h>
 #include "components/player.h"
+#include "components/deltaTime.h"
 
 #define M_PI 3.14159265358979323846264338327950288
 
+
+float speed = 0.0f;
+
+
+/*/sfVector2i Player_GetMousePosition(sfVector2i MousePosition) {
+    return MousePosition;
+}*/
+
 void PlayerInit(sfRenderWindow** window, sfSprite** ship, sfTexture** shipTexture, float* shipRotation) {
+
     *shipTexture = sfTexture_createFromFile("asset/Sprites/SpaceWar/space_ship.png", NULL);
     if (!*shipTexture) {
         exit(EXIT_FAILURE);
@@ -14,6 +24,7 @@ void PlayerInit(sfRenderWindow** window, sfSprite** ship, sfTexture** shipTextur
     sfSprite_setTexture(*ship, *shipTexture, sfTrue);
     sfVector2f shipPosition = { sfRenderWindow_getSize(*window).x / 2, sfRenderWindow_getSize(*window).y / 2 };
     sfSprite_setPosition(*ship, shipPosition);
+
 }
 
 void PlayerUpdate(sfRenderWindow* window, sfSprite* ship, float shipRotation) {
@@ -23,25 +34,25 @@ void PlayerUpdate(sfRenderWindow* window, sfSprite* ship, float shipRotation) {
     float dx = mousePosition.x - shipPosition.x;    // direction x
     float dy = mousePosition.y - shipPosition.y;    // direction y 
 
-    float magnitude = sqrt(dx * dx + dy * dy);      // norme vecteur
+    float magnitude = sqrt(dx * dx + dy * dy);      // norme
 
     if (magnitude > 0) {    // normalisation utile?
         dx /= magnitude;
         dy /= magnitude;
     }
 
-    float speed= 2.0f;
 
     if(sfMouse_isButtonPressed(sfMouseRight)) {
-        sfSprite_move(ship, (sfVector2f) { (dx * speed, dy * speed) });
+        speed = 2.0f;
     }
     else {
-        // Inertie pour ralentir le vaisseau
+        // Inertie
         speed *= 0.99f;
-        sfSprite_move(ship, (sfVector2f) { (dx * speed, dy * speed) });
     }
+    sfSprite_move(ship, (sfVector2f) { dx * speed * dt, dy * speed * dt });
 
     shipRotation = atan2f(dy, dx) * 180.0f / M_PI;
+    sfSprite_setOrigin(ship, (sfVector2f) { 10, 9 });;
     sfSprite_setRotation(ship, shipRotation);
 }
 
