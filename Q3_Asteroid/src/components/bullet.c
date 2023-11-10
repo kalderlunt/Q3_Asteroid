@@ -4,33 +4,74 @@
 #include "components/bullet.h"
 #include "components/deltaTime.h"
 
-#define MAX_BULLETS 100
+void BulletInit(Bullet** bullets, int* numBullets, int* maxBullets) {    
+    *numBullets = 0;
+    *maxBullets = 10;
 
-void BulletInit(Ball* bullets, int* numBullets, int maxBullets, sfTexture* texture, sfVector2f position, sfVector2f velocity) {
-    bullets = {
-        .sprite = ;
-        .texture = sfTexture_createFromFile("asset/Sprites/SpaceWar/space_ship.png", NULL);
-        .velocity = 0;
+    // Allocation de mémoire pour le tableau de balles
+    *bullets = malloc(*maxBullets * sizeof(Bullet));
+    
+    if (*bullets == NULL) {
+        printf("ERREUR #0040 | bullet initialization.\n");
+        exit(EXIT_FAILURE);
+    }
 
-        .numBullets = 0;
-        .maxBullets = 0;
-    };
+
+
+
+    sfTexture* texture = sfTexture_createFromFile("asset/Sprites/SpaceWar/cannon.png", NULL);
+    if (texture == NULL) {
+        // Gestion de l'erreur de chargement de la texture
+        printf("ERREUR #0043 | Impossible de charger la texture pour les balles.\n");
+        // Gérer l'erreur, par exemple, retourner ou quitter la fonction.
+    }
+
+    // Initialisez chaque balle avec la texture chargée
+    for (int i = 0; i < *maxBullets; i++) {
+        (*bullets)[i].texture = texture;
+    }
+
+
+
 }
 
 
-void BulletCreate(Ball* bullets, int* numBullets, sfTexture* texture, sfVector2f position, sfVector2f velocity) {
-    if (*numBullets < bullets->maxBullets) {
-        bullets[*numBullets].sprite = sfSprite_create();
+void BulletCreate(Bullet* bullets, int* numBullets, int maxBullets, sfTexture* texture, sfVector2f position, sfVector2f velocity) {
 
-        sfSprite_setTexture(bullets[*numBullets].sprite, bullets->texture, sfTrue);
-        sfSprite_setPosition(bullets[*numBullets].sprite, position);
-        bullets[*numBullets].velocity = velocity;
-        (*numBullets)++;
+    if (bullets != NULL && numBullets != NULL && texture != NULL) {
+        if (*numBullets < maxBullets) {
+            bullets[*numBullets].sprite = sfSprite_create();
+
+            // Vérifier si la création du sprite a réussi
+            if (bullets[*numBullets].sprite != NULL) {
+                sfSprite_setTexture(bullets[*numBullets].sprite, texture, sfTrue);
+                sfSprite_setPosition(bullets[*numBullets].sprite, position);
+                bullets[*numBullets].velocity = velocity;
+                sfSprite_move(bullets[*numBullets].sprite, bullets[*numBullets].velocity);
+                (*numBullets)++;
+                printf("PEW  |  PEW\n");
+            }
+            else {
+                // Gestion de l'échec de création du sprite
+                printf("ERREUR #0041 | Bullet sprite creation.\n");
+            }
+        }
+        else {
+            // Gestion de dépassement de la limite des balles
+            printf("ERREUR | Depassement de la limite des balles.\n");
+        }
+    }
+    else {
+        // Gestion de cas où des pointeurs sont NULL
+        printf("ERREUR | Pointeur NULL passé à BulletCreate.\n");
     }
 }
 
 
-void BulletsUpdate(sfRenderWindow* window, sfSprite* ship, Ball* bullets, int* numBullets, int maxBullets) {
+
+
+
+void BulletsUpdate(sfRenderWindow* window, sfSprite* ship, Bullet* bullets, int* numBullets, int maxBullets) {
     // POSITION
     sfVector2i mousePosition = sfMouse_getPositionRenderWindow(window);
     sfVector2f shipPosition = sfSprite_getPosition(ship);
@@ -50,14 +91,16 @@ void BulletsUpdate(sfRenderWindow* window, sfSprite* ship, Ball* bullets, int* n
 
     if (sfMouse_isButtonPressed(sfMouseLeft)) {
         sfVector2f bulletPosition = sfSprite_getPosition(ship);
-        sfVector2f bulletVelocity = { dir.x * 5.0f, dir.y * 5.0f };
+        sfVector2f bulletVelocity = { dir.x, dir.y };
+        printf("%f  |  %f\n", bulletVelocity.x, bulletVelocity.y);
 
-        BulletCreate(bullets, &numBullets, bullets->texture, bulletPosition, bulletVelocity);
+        BulletCreate(bullets, numBullets, maxBullets, bullets->texture, bulletPosition, bulletVelocity);
     }
 
     for (int i = 0; i < *numBullets; i++) {
         sfSprite_move(bullets[i].sprite, bullets[i].velocity);
     }
+
 
     if (*numBullets > maxBullets) {
         *numBullets = maxBullets;
@@ -65,16 +108,26 @@ void BulletsUpdate(sfRenderWindow* window, sfSprite* ship, Ball* bullets, int* n
 }
 
 
-void BulletsDisplay(sfRenderWindow* window, Ball* bullets, int numBullets) {
+void BulletsDisplay(sfRenderWindow* window, Bullet* bullets, int numBullets) {
     for (int i = 0; i < numBullets; i++) {
-        sfRenderWindow_drawCircleShape(window, bullets[i].sprite, NULL);
+        sfRenderWindow_drawSprite(window, bullets[i].sprite, NULL);
     }
 }
 
 
-void BulletsDestroy(Ball* bullets, int numBullets) {
-    for (int i = 0; i < numBullets; i++) {
-        sfCircleShape_destroy(bullets[i].sprite);
-        bullets->maxBullets --;
+void BulletsDestroy(Bullet* bullets, int numBullets, int maxBullets) {
+    if (bullets != NULL) {
+        for (int i = 0; i < numBullets; i++) {
+            if (bullets[i].sprite != NULL) {
+                sfSprite_destroy(bullets[i].sprite);
+                bullets[i].sprite = NULL;
+            }
+            // Libérez la texture de chaque balle
+            if (bullets[i].texture != NULL) {
+                sfTexture_destroy(bullets[i].texture);
+                bullets[i].texture = NULL;
+            }
+        }
     }
+    free(bullets);
 }

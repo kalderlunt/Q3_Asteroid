@@ -10,7 +10,8 @@ void DeltaInit(sfClock** deltaClock) {
 
 void DeltaTime(sfClock* deltaClock) {
     sfTime dtime = sfClock_getElapsedTime(deltaClock);
-    dt = sfTime_asMilliseconds(dtime) * 0.001;
+    dt = sfTime_asMilliseconds(dtime);
+    printf("%d", dt);
     sfClock_restart(deltaClock);
 }
 
