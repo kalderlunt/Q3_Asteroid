@@ -7,13 +7,13 @@
 void GameInit(Game* game) {
     DeltaInit(&(game->deltaClock));
     WindowInit(&(game->window));
-    BulletInit(&(game->bullets), &(game->numBullets), &(game->maxBullets));
+    BulletInit(&(game->bullets), &(game->numBullets), &(game->maxBullets), &(game->bulletRotation));
     PlayerInit(&(game->window), &(game->ship), &(game->shipTexture), &(game->shipRotation));
 }
 
 void GameUpdate(Game* game) {
     DeltaTime(game->deltaClock);
-    BulletsUpdate(game->window, game->ship, game->bullets, &(game->numBullets), game->maxBullets);
+    BulletsUpdate(game->window, game->ship, game->bullets, &(game->numBullets), game->maxBullets, game->bulletRotation);
     PlayerUpdate(game->window, game->ship, game->shipTexture, game->shipRotation);
 }
 

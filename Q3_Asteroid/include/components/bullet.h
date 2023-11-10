@@ -11,14 +11,11 @@ typedef struct Bullet{
 } Bullet;
 
 ///sfTexture* texture, sfVector2f position, sfVector2f velocity
-void BulletInit(Bullet** bullets, int* numBullets, int* maxBullets);
+void BulletInit(Bullet** bullets, int* numBullets, int* maxBullets, float* bulletRotation);
 
-void BulletCreate(Bullet* bullets, int* numBullets, int maxBullets, sfTexture* texture, sfVector2f position, sfVector2f velocity);
+void BulletCreate(Bullet* bullets, int* numBullets, int maxBullets, sfTexture* texture, sfVector2f position, sfVector2f velocity, float bulletRotation);
 
-void BulletsUpdate(sfRenderWindow* window, sfSprite* ship, Bullet* bullets, int* numBullets, int maxBullets);
-
-//sfVector2i Bullet_GetMousePosition(sfVector2i MousePosition);
-
+void BulletsUpdate(sfRenderWindow* window, sfSprite* ship, Bullet* bullets, int* numBullets, int maxBullets, float bulletRotation);
 
 void BulletsDisplay(sfRenderWindow* window, Bullet* bullets, int numBullets);
 

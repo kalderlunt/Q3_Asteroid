@@ -11,6 +11,7 @@ typedef struct Game {
     sfSprite* ship;
     sfTexture* shipTexture;
     float shipRotation;
+    float bulletRotation;
     Bullet* bullets;
     int numBullets;
     int maxBullets;
@@ -20,5 +21,7 @@ void GameInit(Game* game);
 void GameUpdate(Game* game);
 void GameDisplay(Game* game);
 void DestroyResources(Game* game);
+
+void GameLoop(Game* game);
 
 #endif /*GAME_H*/

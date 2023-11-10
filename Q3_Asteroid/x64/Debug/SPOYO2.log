@@ -1,4 +1,6 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (SPOYO2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  bullet.c
-D:\OneDrive - La Horde\B1-Bis\Quetes\Quete_3\Github_Quete3\Q3_Asteroid\Q3_Asteroid\src\components\bullet.c(83,23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  game.c
+D:\OneDrive - La Horde\B1-Bis\Quetes\Quete_3\Github_Quete3\Q3_Asteroid\Q3_Asteroid\src\components\game.c(27,18): warning C4047: 'function': 'sfClock *' differs in levels of indirection from 'sfClock **'
+D:\OneDrive - La Horde\B1-Bis\Quetes\Quete_3\Github_Quete3\Q3_Asteroid\Q3_Asteroid\src\components\game.c(27,18): warning C4024: 'DeltaDestroy': different types for formal and actual parameter 1
+  LINK : D:\OneDrive - La Horde\B1-Bis\Quetes\Quete_3\Github_Quete3\Q3_Asteroid\Q3_Asteroid\x64\Debug\Q3_Asteroid.exe not found or not built by the last incremental link; performing full link
   SPOYO2.vcxproj -> D:\OneDrive - La Horde\B1-Bis\Quetes\Quete_3\Github_Quete3\Q3_Asteroid\Q3_Asteroid\x64\Debug\Q3_Asteroid.exe

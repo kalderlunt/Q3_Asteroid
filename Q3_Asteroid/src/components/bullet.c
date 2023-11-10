@@ -4,9 +4,14 @@
 #include "components/bullet.h"
 #include "components/deltaTime.h"
 
-void BulletInit(Bullet** bullets, int* numBullets, int* maxBullets) {    
+#define M_PI 3.14159265358979323846264338327950288
+
+
+
+void BulletInit(Bullet** bullets, int* numBullets, int* maxBullets, float* bulletRotation) {
     *numBullets = 0;
     *maxBullets = 10;
+
 
     // Allocation de mémoire pour le tableau de balles
     *bullets = malloc(*maxBullets * sizeof(Bullet));
@@ -36,7 +41,7 @@ void BulletInit(Bullet** bullets, int* numBullets, int* maxBullets) {
 }
 
 
-void BulletCreate(Bullet* bullets, int* numBullets, int maxBullets, sfTexture* texture, sfVector2f position, sfVector2f velocity) {
+void BulletCreate(Bullet* bullets, int* numBullets, int maxBullets, sfTexture* texture, sfVector2f position, sfVector2f velocity, float bulletRotation) {
 
     if (bullets != NULL && numBullets != NULL && texture != NULL) {
         if (*numBullets < maxBullets) {
@@ -47,9 +52,15 @@ void BulletCreate(Bullet* bullets, int* numBullets, int maxBullets, sfTexture* t
                 sfSprite_setTexture(bullets[*numBullets].sprite, texture, sfTrue);
                 sfSprite_setPosition(bullets[*numBullets].sprite, position);
                 bullets[*numBullets].velocity = velocity;
-                sfSprite_move(bullets[*numBullets].sprite, bullets[*numBullets].velocity);
                 (*numBullets)++;
                 printf("PEW  |  PEW\n");
+
+                
+                sfSprite_setOrigin(bullets, (sfVector2f) { 10, 9 });
+                sfSprite_setRotation(bullets, bulletRotation);
+                
+                
+                sfSprite_move(bullets[*numBullets].sprite, bullets[*numBullets].velocity);
             }
             else {
                 // Gestion de l'échec de création du sprite
@@ -71,7 +82,7 @@ void BulletCreate(Bullet* bullets, int* numBullets, int maxBullets, sfTexture* t
 
 
 
-void BulletsUpdate(sfRenderWindow* window, sfSprite* ship, Bullet* bullets, int* numBullets, int maxBullets) {
+void BulletsUpdate(sfRenderWindow* window, sfSprite* ship, Bullet* bullets, int* numBullets, int maxBullets, float bulletRotation) {
     // POSITION
     sfVector2i mousePosition = sfMouse_getPositionRenderWindow(window);
     sfVector2f shipPosition = sfSprite_getPosition(ship);
@@ -88,13 +99,14 @@ void BulletsUpdate(sfRenderWindow* window, sfSprite* ship, Bullet* bullets, int*
     }
 
 
+    bulletRotation = atan2f(dir.y, dir.x) * 180.0f / M_PI;
 
     if (sfMouse_isButtonPressed(sfMouseLeft)) {
         sfVector2f bulletPosition = sfSprite_getPosition(ship);
         sfVector2f bulletVelocity = { dir.x, dir.y };
         printf("%f  |  %f\n", bulletVelocity.x, bulletVelocity.y);
 
-        BulletCreate(bullets, numBullets, maxBullets, bullets->texture, bulletPosition, bulletVelocity);
+        BulletCreate(bullets, numBullets, maxBullets, bullets->texture, bulletPosition, bulletVelocity, bulletRotation);
     }
 
     for (int i = 0; i < *numBullets; i++) {
