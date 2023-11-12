@@ -52,15 +52,16 @@ void BulletCreate(Bullet* bullets, int* numBullets, int maxBullets, sfTexture* t
                 sfSprite_setTexture(bullets[*numBullets].sprite, texture, sfTrue);
                 sfSprite_setPosition(bullets[*numBullets].sprite, position);
                 bullets[*numBullets].velocity = velocity;
-                (*numBullets)++;
-                printf("PEW  |  PEW\n");
 
-                
-                sfSprite_setOrigin(bullets, (sfVector2f) { 10, 9 });
-                sfSprite_setRotation(bullets, bulletRotation);
-                
+                //sfSprite_setOrigin(bullets, (sfVector2f) { 10, 9 });
+                //sfSprite_setRotation(bullets, bulletRotation);
+                sfSprite_setOrigin(bullets[*numBullets].sprite, (sfVector2f) { 10, 9 });
+                sfSprite_setRotation(bullets[*numBullets].sprite, bulletRotation);
                 
                 sfSprite_move(bullets[*numBullets].sprite, bullets[*numBullets].velocity);
+                printf("PEW  |  PEW\n");
+                (*numBullets)++;
+                
             }
             else {
                 // Gestion de l'échec de création du sprite
