@@ -9,11 +9,11 @@
 
 
 void BulletInit(Bullet** bullets, int* numBullets, int* maxBullets, float* bulletRotation) {
-    *numBullets = 0;
+    *numBullets = 10;
     *maxBullets = 10;
 
 
-    // Allocation de mémoire pour le tableau de balles
+    // memory
     *bullets = malloc(*maxBullets * sizeof(Bullet));
     
     if (*bullets == NULL) {
@@ -26,18 +26,18 @@ void BulletInit(Bullet** bullets, int* numBullets, int* maxBullets, float* bulle
 
     sfTexture* texture = sfTexture_createFromFile("asset/Sprites/SpaceWar/cannon.png", NULL);
     if (texture == NULL) {
-        // Gestion de l'erreur de chargement de la texture
-        printf("ERREUR #0043 | Impossible de charger la texture pour les balles.\n");
-        // Gérer l'erreur, par exemple, retourner ou quitter la fonction.
+        printf("ERREUR #0043 | Unable to load texture for bullets.\n");
     }
 
-    // Initialisez chaque balle avec la texture chargée
+
     for (int i = 0; i < *maxBullets; i++) {
         (*bullets)[i].texture = texture;
+
+        (*bullets)[i].inMagazine = 0;
+        (*bullets)[i].toReload = *maxBullets;
+        //printf("Bullet to Reload %d\n", (*bullets)[i].toReload);
+        (*bullets)[i].reloadClock = sfClock_create();
     }
-
-
-
 }
 
 
@@ -45,37 +45,51 @@ void BulletCreate(Bullet* bullets, int* numBullets, int maxBullets, sfTexture* t
 
     if (bullets != NULL && numBullets != NULL && texture != NULL) {
         if (*numBullets < maxBullets) {
-            bullets[*numBullets].sprite = sfSprite_create();
 
-            // Vérifier si la création du sprite a réussi
-            if (bullets[*numBullets].sprite != NULL) {
-                sfSprite_setTexture(bullets[*numBullets].sprite, texture, sfTrue);
-                sfSprite_setPosition(bullets[*numBullets].sprite, position);
-                bullets[*numBullets].velocity = velocity;
 
-                //sfSprite_setOrigin(bullets, (sfVector2f) { 10, 9 });
-                //sfSprite_setRotation(bullets, bulletRotation);
-                sfSprite_setOrigin(bullets[*numBullets].sprite, (sfVector2f) { 10, 9 });
-                sfSprite_setRotation(bullets[*numBullets].sprite, bulletRotation);
-                
-                sfSprite_move(bullets[*numBullets].sprite, bullets[*numBullets].velocity);
-                printf("PEW  |  PEW\n");
-                (*numBullets)++;
-                
+            if (bullets[*numBullets].inMagazine <= 0) {
+                sfTime reloadTime = sfClock_getElapsedTime(bullets[*numBullets].reloadClock);
+                if (sfTime_asMilliseconds(reloadTime) > 500 && bullets[*numBullets].inMagazine < bullets[*numBullets].toReload) {  // Recharge toutes les 500 ms
+                    bullets[*numBullets].inMagazine = bullets[*numBullets].toReload;
+                    printf("Reload\n");
+                    printf("Reload\n");
+                    printf("Reload\n");
+                    printf("Reload\n");
+                    sfClock_restart(bullets[*numBullets].reloadClock);
+                }
+            }
+
+
+            if (bullets[*numBullets].inMagazine > 0) {
+                bullets[*numBullets].sprite = sfSprite_create();
+
+                if (bullets[*numBullets].sprite != NULL) {
+                    sfSprite_setTexture(bullets[*numBullets].sprite, texture, sfTrue);
+                    sfSprite_setPosition(bullets[*numBullets].sprite, position);
+                    bullets[*numBullets].velocity = velocity;
+
+                    sfSprite_setOrigin(bullets[*numBullets].sprite, (sfVector2f) { 10, 9 });
+                    sfSprite_setRotation(bullets[*numBullets].sprite, bulletRotation);
+
+                    sfSprite_move(bullets[*numBullets].sprite, bullets[*numBullets].velocity);
+                    printf("PEW  |  PEW\n");
+                    (*numBullets)++;
+                    bullets[*numBullets].inMagazine--;
+                }
+                else {
+                    printf("ERREUR #0041 | Bullet sprite creation.\n");
+                }
             }
             else {
-                // Gestion de l'échec de création du sprite
-                printf("ERREUR #0041 | Bullet sprite creation.\n");
+                printf("ERREUR #00042 | No bullets left in the magazine. Wait for reload.\n");
             }
         }
         else {
-            // Gestion de dépassement de la limite des balles
-            printf("ERREUR | Depassement de la limite des balles.\n");
+            printf("ERREUR #00043 | Bullet limit exceeded.\n");
         }
     }
     else {
-        // Gestion de cas où des pointeurs sont NULL
-        printf("ERREUR | Pointeur NULL passé à BulletCreate.\n");
+        printf("ERREUR #0049 | Pointeur NULL to BulletCreate.\n");
     }
 }
 
@@ -114,6 +128,7 @@ void BulletsUpdate(sfRenderWindow* window, sfSprite* ship, Bullet* bullets, int*
         sfSprite_move(bullets[i].sprite, bullets[i].velocity);
     }
 
+    printf("%d", *numBullets);
 
     if (*numBullets > maxBullets) {
         *numBullets = maxBullets;
@@ -135,11 +150,11 @@ void BulletsDestroy(Bullet* bullets, int numBullets, int maxBullets) {
                 sfSprite_destroy(bullets[i].sprite);
                 bullets[i].sprite = NULL;
             }
-            // Libérez la texture de chaque balle
             if (bullets[i].texture != NULL) {
                 sfTexture_destroy(bullets[i].texture);
                 bullets[i].texture = NULL;
             }
+            sfClock_destroy(bullets[i].reloadClock);
         }
     }
     free(bullets);

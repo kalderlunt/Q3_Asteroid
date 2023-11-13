@@ -1,5 +1,5 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(517,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (SPOYO2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (SPOYO2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   bullet.c
-E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\src\components\bullet.c(103,52): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\src\components\bullet.c(95,23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  SPOYO2.vcxproj -> E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\x64\Debug\Q3_Asteroid.exe
+D:\OneDrive - La Horde\B1-Bis\Quetes\Quete_3\Github_Quete3\Q3_Asteroid\Q3_Asteroid\src\components\bullet.c(117,52): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\OneDrive - La Horde\B1-Bis\Quetes\Quete_3\Github_Quete3\Q3_Asteroid\Q3_Asteroid\src\components\bullet.c(109,23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  SPOYO2.vcxproj -> D:\OneDrive - La Horde\B1-Bis\Quetes\Quete_3\Github_Quete3\Q3_Asteroid\Q3_Asteroid\x64\Debug\Q3_Asteroid.exe

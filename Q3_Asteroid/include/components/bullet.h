@@ -8,6 +8,10 @@ typedef struct Bullet{
     sfTexture* texture;
     sfVector2f velocity;
 
+    int inMagazine;
+    int toReload;
+    sfClock* reloadClock;
+
 } Bullet;
 
 ///sfTexture* texture, sfVector2f position, sfVector2f velocity
