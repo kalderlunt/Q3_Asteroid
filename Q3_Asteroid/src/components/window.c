@@ -9,6 +9,7 @@ void WindowInit(sfRenderWindow** window) {
     // Window initialization
     sfVideoMode mode = { windowWidth, windowHeight, 32 };
     *window = sfRenderWindow_create(mode, "Asteroid", sfClose, NULL);
+    sfRenderWindow_setFramerateLimit(*window, 60);
 
     if (!*window) {
         // Failure management

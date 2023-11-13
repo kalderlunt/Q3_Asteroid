@@ -1,52 +1,45 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "components/game.h"
 #include "components/window.h"
 #include "components/player.h"
 #include "components/deltaTime.h"
+#include "components/bullet.h"
 
-
-void GameInit(sfRenderWindow** window, sfClock** deltaClock, sfSprite** ship, sfTexture** shipTexture, float* shipRotation) {
-    DeltaInit(deltaClock);
-
-    WindowInit(window);
-    PlayerInit(window, ship, shipTexture, shipRotation);
+void GameInit(Game* game) {
+    DeltaInit(&(game->deltaClock));
+    WindowInit(&(game->window));
+    BulletInit(&(game->bullets), &(game->numBullets), &(game->maxBullets), &(game->bulletRotation));
+    PlayerInit(&(game->window), &(game->ship), &(game->shipTexture), &(game->shipRotation));
 }
 
-void GameUpdate(sfRenderWindow* window, sfClock* deltaClock, sfSprite* ship, sfTexture* shipTexture, float shipRotation) {
-    DeltaTime(deltaClock);
-    PlayerUpdate(window, ship, shipRotation);
+void GameUpdate(Game* game) {
+    DeltaTime(game->deltaClock);
+    BulletsUpdate(game->window, game->ship, game->bullets, &(game->numBullets), game->maxBullets, game->bulletRotation);
+    PlayerUpdate(game->window, game->ship, game->shipTexture, game->shipRotation);
 }
 
-void GameDisplay(sfRenderWindow* window, sfSprite* ship, sfTexture* shipTexture) {
-    
-    sfRenderWindow_clear(window, sfTransparent);
-
-    PlayerDisplay(window, ship);
-    
-    WindowDisplay(window);
+void GameDisplay(Game* game) {
+    sfRenderWindow_clear(game->window, sfTransparent);
+    PlayerDisplay(game->window, game->ship);
+    BulletsDisplay(game->window, game->bullets, game->numBullets);
+    WindowDisplay(game->window);
+}
+void DestroyResources(Game* game) {
+    DeltaDestroy(&(game->deltaClock));
+    BulletsDestroy(game->bullets, game->numBullets, game->maxBullets);
+    PlayerDestroy(game->ship, game->shipTexture);
+    WindowDestroy(game->window);
 }
 
-void DestroyResources(sfRenderWindow* window, sfClock* deltaClock, sfSprite* ship, sfTexture* shipTexture) {
-    // Liberating resources
-
-    PlayerDestroy(ship, shipTexture);
-    DeltaDestroy(deltaClock);
-    WindowDestroy(window);
-}
-
-void Game(sfRenderWindow* window, sfClock* deltaClock, sfSprite* ship, sfTexture* shipTexture, float shipRotation) {
-    // Main game loop
-    while (sfRenderWindow_isOpen(window)) {
+void GameLoop(Game* game) {
+    while (sfRenderWindow_isOpen(game->window)) {
         sfEvent event;
-        while (sfRenderWindow_pollEvent(window, &event)) {
+        while (sfRenderWindow_pollEvent(game->window, &event)) {
             if (event.type == sfEvtClosed) {
-                sfRenderWindow_close(window);
+                sfRenderWindow_close(game->window);
             }
         }
 
-        GameUpdate(window, deltaClock, ship, shipTexture, shipRotation, shipRotation);
-
-        GameDisplay(window, ship, shipTexture);        
+        GameUpdate(game);
+        GameDisplay(game);
     }
 }
