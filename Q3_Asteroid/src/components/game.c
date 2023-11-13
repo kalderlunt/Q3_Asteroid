@@ -1,39 +1,45 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "components/window.h"
 #include "components/game.h"
+#include "components/window.h"
+#include "components/player.h"
+#include "components/deltaTime.h"
+#include "components/bullet.h"
 
-
-void InitGame(sfRenderWindow** window) {
-    InitWindow(window);
+void GameInit(Game* game) {
+    DeltaInit(&(game->deltaClock));
+    WindowInit(&(game->window));
+    BulletInit(&(game->bullets), &(game->numBullets), &(game->maxBullets), &(game->bulletRotation));
+    PlayerInit(&(game->window), &(game->ship), &(game->shipTexture), &(game->shipRotation));
 }
 
-void DestroyResources(sfRenderWindow* window) {
-    // Liberating resources
-    DestroyWindow(window);
+void GameUpdate(Game* game) {
+    DeltaTime(game->deltaClock);
+    BulletsUpdate(game->window, game->ship, game->bullets, &(game->numBullets), game->maxBullets, game->bulletRotation);
+    PlayerUpdate(game->window, game->ship, game->shipTexture, game->shipRotation);
 }
 
-void Game(sfRenderWindow* window) {
-    // Main game loop
-    while (sfRenderWindow_isOpen(window)) {
+void GameDisplay(Game* game) {
+    sfRenderWindow_clear(game->window, sfTransparent);
+    PlayerDisplay(game->window, game->ship);
+    BulletsDisplay(game->window, game->bullets, game->numBullets);
+    WindowDisplay(game->window);
+}
+void DestroyResources(Game* game) {
+    DeltaDestroy(&(game->deltaClock));
+    BulletsDestroy(game->bullets, game->numBullets, game->maxBullets);
+    PlayerDestroy(game->ship, game->shipTexture);
+    WindowDestroy(game->window);
+}
+
+void GameLoop(Game* game) {
+    while (sfRenderWindow_isOpen(game->window)) {
         sfEvent event;
-        while (sfRenderWindow_pollEvent(window, &event)) {
+        while (sfRenderWindow_pollEvent(game->window, &event)) {
             if (event.type == sfEvtClosed) {
-                sfRenderWindow_close(window);
+                sfRenderWindow_close(game->window);
             }
         }
 
-        // Game update logic
-        if (sfKeyboard_isKeyPressed(sfKeyEscape)) { sfRenderWindow_close(window); } // quit
-        //UpdateLogic();
-
-        // Clear screen
-        sfRenderWindow_clear(window, sfTransparent);
-
-        // Draw your elements
-            //UpdateDraw();
-
-        // Display screen
-        sfRenderWindow_display(window);
+        GameUpdate(game);
+        GameDisplay(game);
     }
 }

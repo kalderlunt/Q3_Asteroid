@@ -3,8 +3,10 @@
 
 #include <SFML/Graphics.h>
 
-void InitWindow(sfRenderWindow** window);
+void WindowInit(sfRenderWindow** window);
 
-void DestroyWindow(sfRenderWindow* window);
+void WindowDisplay(sfRenderWindow* window);
+
+void WindowDestroy(sfRenderWindow* window);
 
 #endif /*WINDOW_H*/
