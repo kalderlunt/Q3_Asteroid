@@ -26,7 +26,6 @@
     <ClCompile Include="src\components\player.c" />
     <ClCompile Include="src\components\window.c" />
     <ClCompile Include="src\main.c" />
-    <ClCompile Include="src\Update.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\components\asteroid.h" />
@@ -35,7 +34,6 @@
     <ClInclude Include="include\components\game.h" />
     <ClInclude Include="include\components\player.h" />
     <ClInclude Include="include\components\window.h" />
-    <ClInclude Include="include\Update.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
