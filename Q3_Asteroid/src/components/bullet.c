@@ -11,7 +11,7 @@
 void BulletInit(Bullet** bullets) {
     emptyLoaderBullets = 0;
     maxLoaderBullets = 10;
-    timeToReloadBulletInSecond = 3.0f;
+    timeToReloadBulletInSecond = 1.75f;
     numBullets = maxLoaderBullets;
 
     // memory
@@ -29,7 +29,7 @@ void BulletInit(Bullet** bullets) {
 
     reloadClock = sfClock_create();
 
-    for (int i = emptyLoaderBullets; i > numBullets; i--) {
+    for (int i = maxLoaderBullets; i > numBullets; i--) {
         (*bullets)[i].texture = (*bullets)->texture;
     }
 }
@@ -91,6 +91,7 @@ void BulletsUpdate(sfRenderWindow* window, sfSprite* ship, Bullet* bullets) {
 
 
     if (numBullets <= emptyLoaderBullets) {
+        numBullets = emptyLoaderBullets;
         sfTime reloadTime = sfClock_getElapsedTime(reloadClock);
         if (sfTime_asSeconds(reloadTime) > timeToReloadBulletInSecond) {  // reload every 500 ms
             numBullets = maxLoaderBullets;
@@ -106,20 +107,16 @@ void BulletsUpdate(sfRenderWindow* window, sfSprite* ship, Bullet* bullets) {
         }
     }
 
-    for (int i = emptyLoaderBullets; i > numBullets; i--) {
-        sfSprite_move(bullets[i - 1].sprite, bullets[i - 1].velocity);
+    for (int i = maxLoaderBullets; i > numBullets; i--) {
+        sfSprite_move(bullets[i].sprite, bullets[i].velocity);
     }
 
     printf("%d  ", numBullets);
-
-    if (numBullets < emptyLoaderBullets) {
-        numBullets = emptyLoaderBullets;
-    }
 }
 
 
 void BulletsDisplay(sfRenderWindow* window, Bullet* bullets){
-    for (int i = emptyLoaderBullets; i > numBullets; i--) {
+    for (int i = maxLoaderBullets; i > numBullets; i--) {
         sfRenderWindow_drawSprite(window, bullets[i].sprite, NULL);
     }
 }
@@ -127,7 +124,7 @@ void BulletsDisplay(sfRenderWindow* window, Bullet* bullets){
 
 void BulletsDestroy(Bullet* bullets) {
     if (bullets != NULL) {
-        for (int i = emptyLoaderBullets; i > numBullets; i--) {
+        for (int i = maxLoaderBullets; i > numBullets; i--) {
             if (bullets[i].sprite != NULL) {
                 sfSprite_destroy(bullets[i].sprite);
                 bullets[i].sprite = NULL;
