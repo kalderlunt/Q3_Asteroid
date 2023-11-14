@@ -10,18 +10,19 @@ typedef struct Asteroid {
     sfVector2f position;
     sfVector2f velocity;
 
-    sfClock* respawnClock;
     float size;
 } Asteroid;
 
 int numAsteroids;
 int maxAsteroids;
 
+sfClock* respawnClock;
+float timeToSpawnAsteroidInSecond;
 
 
 void AsteroidsInit(Asteroid** asteroids);
 
-void AsteroidsCreate(Asteroid* asteroids);
+void AsteroidsCreate(sfRenderWindow* window, Asteroid* asteroids);
 
 void AsteroidsUpdate(sfRenderWindow* window, sfSprite* ship, Asteroid* asteroids);
 

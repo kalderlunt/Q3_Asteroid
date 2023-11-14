@@ -10,52 +10,36 @@
 void AsteroidsInit(Asteroid** asteroids) {
 
     numAsteroids = 0;
-    maxAsteroids = 20;
-
-    *asteroids = malloc(maxAsteroids * sizeof(Asteroid));
-
-    if (*asteroids == NULL) {
-        printf("ERREUR #0050 | bullet initialization.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    (*asteroids)->texture = sfTexture_createFromFile("asset/Sprites/SpaceWar/asteroids_1.png", NULL);
-    if (!(*asteroids)->texture) {
-        printf("ERREUR #0053 | Unable to load texture for asteroids.\n");
-    }
+    maxAsteroids = 10;
+    
+    *asteroids = (Asteroid*)malloc(sizeof(Asteroid) * maxAsteroids);
 
     for (int i = 0; i < maxAsteroids; i++) {
-        (*asteroids)[i].texture = (*asteroids)->texture;
+        (*asteroids)[i].sprite = sfSprite_create();
+        (*asteroids)[i].texture = sfTexture_createFromFile("asset/Sprites/SpaceWar/asteroids_1.png", NULL);
+        (*asteroids)[i].size = 1.0f;
     }
+    
+    respawnClock = sfClock_create();
+    timeToSpawnAsteroidInSecond = 2.0f;
 }
 
-void AsteroidsCreate(Asteroid* asteroids) {
+void AsteroidsCreate(sfRenderWindow* window, Asteroid* asteroids) {
     if (asteroids != NULL) {
         if (numAsteroids < maxAsteroids) {
-            for (int i = 0; i < maxAsteroids; i++) {
-                asteroids[i].sprite = sfSprite_create();
-                
-                if (asteroids[i].sprite != NULL) {
-                    sfSprite_setTexture(asteroids[i].sprite, asteroids->texture, sfTrue);
-                    sfSprite_setPosition(asteroids[i].sprite, asteroids->position);
-                    asteroids[i].velocity = asteroids->velocity;
 
-                    printf("ASTEROIDDDD\n");
-                    printf("ASTEROIDDD\n");
-                    printf("ASTEROIDD\n");
-                    printf("ASTEROIDDD\n");
-                    printf("ASTEROIDDDD\n");
-                    sfSprite_move(asteroids[i].sprite, asteroids[i].velocity);
-                    printf("Pouf vla\n");
-                    numAsteroids ++;
-                }
-                else {
-                    printf("ERREUR #0051 | Asteroid sprite creation.\n");
-                }
-            }
-        }
-        else {
-            printf("ERREUR #00053 | Asteroid limit exceeded.\n");
+            asteroids[numAsteroids].position.x = rand() % sfRenderWindow_getSize(window).x;
+            asteroids[numAsteroids].position.y = rand() % sfRenderWindow_getSize(window).y;
+            asteroids[numAsteroids].velocity.x = (float)(rand() % 6);
+            asteroids[numAsteroids].velocity.y = (float)(rand() % 6);
+            
+            sfSprite_setTexture(asteroids[numAsteroids].sprite, asteroids[numAsteroids].texture, sfTrue);
+            sfSprite_setOrigin(asteroids[numAsteroids].sprite, (sfVector2f) { 62 / 2, 46 / 2 });
+            sfSprite_setPosition(asteroids[numAsteroids].sprite, asteroids[numAsteroids].position);
+
+            printf("\n\nSPAWN | Asteroid has spawned.\n\n");
+
+            numAsteroids++;
         }
     }
     else {
@@ -65,47 +49,27 @@ void AsteroidsCreate(Asteroid* asteroids) {
 
 void AsteroidsUpdate(sfRenderWindow* window, sfSprite* ship, Asteroid* asteroids) {
     
+    sfTime elapsed = sfClock_getElapsedTime(respawnClock);
+    float seconds = sfTime_asSeconds(elapsed);
 
-    sfVector2f shipPosition = sfSprite_getPosition(ship);
-
-    sfVector2f dirAsteroid;
-    dirAsteroid.x = asteroids->position.x - shipPosition.x;    // direction x
-    dirAsteroid.y = asteroids->position.y - shipPosition.y;    // direction y 
-
-    float magnitude = sqrt(dirAsteroid.x * dirAsteroid.x + dirAsteroid.y * dirAsteroid.y);      // norme
-
-    if (magnitude > 0) {    // normalisation utile?
-        (*asteroids).velocity.x = dirAsteroid.x / magnitude;
-        (*asteroids).velocity.y = dirAsteroid.y / magnitude;
+    if (seconds > timeToSpawnAsteroidInSecond) {
+        if (numAsteroids < maxAsteroids) {
+            AsteroidsCreate(window, asteroids);
+            sfClock_restart(respawnClock);
+        }
     }
-
-
-    if (sfMouse_isButtonPressed(sfKeySpace)) {
-        (*asteroids).position.x = rand() % sfRenderWindow_getSize(window).x;
-        (*asteroids).position.y = rand() % sfRenderWindow_getSize(window).y;
-        printf("%f  |  %f\n", asteroids->velocity.x, asteroids->velocity.y);
-
-        AsteroidsCreate(asteroids);
-    }
-    
     for (int i = 0; i < numAsteroids; i++) {
-        sfSprite_move(asteroids[i].sprite, asteroids[i].velocity);
 
         // Bounce off the window borders |/\| wraparound
         sfVector2u windowSize = sfRenderWindow_getSize(window);
-        sfVector2f asteroidPos = sfSprite_getPosition(asteroids[i].sprite);
 
-        if (asteroidPos.x < 0 || asteroidPos.x > windowSize.x) 
+        if (asteroids[i].position.x < 0 || asteroids[i].position.x > windowSize.x)
             asteroids[i].velocity.x = -asteroids[i].velocity.x;
 
-        if (asteroidPos.y < 0 || asteroidPos.y > windowSize.y) 
+        if (asteroids[i].position.y < 0 || asteroids[i].position.y > windowSize.y)
             asteroids[i].velocity.y = -asteroids[i].velocity.y;
-    }
 
-    ///////////////////////////////////////////////////////////////printf("%d  ", numAsteroids);
-
-    if (numAsteroids > maxAsteroids) {
-        numAsteroids = maxAsteroids;
+        sfSprite_move(asteroids[i].sprite, asteroids[i].velocity);
     }
 }
 
@@ -118,21 +82,13 @@ void AsteroidsDisplay(sfRenderWindow* window, Asteroid* asteroids) {
 void AsteroidsDestroy(Asteroid* asteroids) {
     if (asteroids != NULL) {
         for (int i = 0; i < numAsteroids; i++) {
-            // Destroy the sprite
-            if (asteroids[i].sprite != NULL) {
-                sfSprite_destroy(asteroids[i].sprite);
-                asteroids[i].sprite = NULL;
-            }
-
-            // Destroy the texture
-            if (asteroids[i].texture != NULL) {
-                sfTexture_destroy(asteroids[i].texture);
-                asteroids[i].texture = NULL;
-            }
+            sfSprite_destroy(asteroids[i].sprite);
+            sfTexture_destroy(asteroids[i].texture);
         }
+        sfClock_destroy(respawnClock);
+        free(asteroids);
     }
     else {
         printf("ERREUR #0058 | Pointeur NULL to AsteroidsDestroy.\n");
     }
-    free(asteroids);
 }
