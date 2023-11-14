@@ -43,7 +43,7 @@ void PlayerUpdate(sfRenderWindow* window, sfSprite* ship, sfTexture* shipTexture
         speed = 0.20f;
     }
     else {
-        // Inertie
+        // Inertia
         speed *= 0.99f;
     }
     sfSprite_move(ship, (sfVector2f) { dir.x * speed * dt, dir.y * speed * dt });

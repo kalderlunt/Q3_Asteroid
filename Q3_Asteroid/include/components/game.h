@@ -2,7 +2,12 @@
 #define GAME_H
 
 #include <SFML/Graphics.h>
+
+#include "components/deltaTime.h"
+#include "components/window.h"
 #include "components/bullet.h"
+#include "components/asteroid.h"
+#include "components/player.h"
 
 
 typedef struct Game {
@@ -11,10 +16,9 @@ typedef struct Game {
     sfSprite* ship;
     sfTexture* shipTexture;
     float shipRotation;
-    float bulletRotation;
     Bullet* bullets;
-    int numBullets;
-    int maxBullets;
+
+    Asteroid* asteroids;
 } Game;
 
 void GameInit(Game* game);
