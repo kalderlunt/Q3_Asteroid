@@ -8,80 +8,56 @@
 
 
 
-void BulletInit(Bullet** bullets, int* numBullets, int* maxBullets, float* bulletRotation) {
-    *numBullets = 10;
-    *maxBullets = 10;
-
+void BulletInit(Bullet** bullets) {
+    emptyLoaderBullets = 0;
+    maxLoaderBullets = 10;
+    timeToReloadBulletInSecond = 1.75f;
+    numBullets = maxLoaderBullets;
 
     // memory
-    *bullets = malloc(*maxBullets * sizeof(Bullet));
+    *bullets = malloc(maxLoaderBullets * sizeof(Bullet));
     
     if (*bullets == NULL) {
         printf("ERREUR #0040 | bullet initialization.\n");
         exit(EXIT_FAILURE);
     }
 
-
-
-
-    sfTexture* texture = sfTexture_createFromFile("asset/Sprites/SpaceWar/cannon.png", NULL);
-    if (texture == NULL) {
+    (*bullets)->texture = sfTexture_createFromFile("asset/Sprites/SpaceWar/cannon.png", NULL);
+    if ((*bullets)->texture == NULL) {
         printf("ERREUR #0043 | Unable to load texture for bullets.\n");
     }
 
+    reloadClock = sfClock_create();
 
-    for (int i = 0; i < *maxBullets; i++) {
-        (*bullets)[i].texture = texture;
-
-        (*bullets)[i].inMagazine = 0;
-        (*bullets)[i].toReload = *maxBullets;
-        //printf("Bullet to Reload %d\n", (*bullets)[i].toReload);
-        (*bullets)[i].reloadClock = sfClock_create();
+    for (int i = maxLoaderBullets; i > numBullets; i--) {
+        (*bullets)[i].texture = (*bullets)->texture;
     }
 }
 
 
-void BulletCreate(Bullet* bullets, int* numBullets, int maxBullets, sfTexture* texture, sfVector2f position, sfVector2f velocity, float bulletRotation) {
+void BulletCreate(Bullet* bullets, sfVector2f SpawnPosition) {
 
-    if (bullets != NULL && numBullets != NULL && texture != NULL) {
-        if (*numBullets < maxBullets) {
-
-
-            if (bullets[*numBullets].inMagazine <= 0) {
-                sfTime reloadTime = sfClock_getElapsedTime(bullets[*numBullets].reloadClock);
-                if (sfTime_asMilliseconds(reloadTime) > 500 && bullets[*numBullets].inMagazine < bullets[*numBullets].toReload) {  // Recharge toutes les 500 ms
-                    bullets[*numBullets].inMagazine = bullets[*numBullets].toReload;
-                    printf("Reload\n");
-                    printf("Reload\n");
-                    printf("Reload\n");
-                    printf("Reload\n");
-                    sfClock_restart(bullets[*numBullets].reloadClock);
-                }
-            }
+    if (bullets != NULL) {
+        if (numBullets > emptyLoaderBullets) {
+            bullets[numBullets].sprite = sfSprite_create();
+            //(*bullets)[numBullets].texture = sfTexture_createFromFile("asset/Sprites/SpaceWar/cannon.png", NULL);
 
 
-            if (bullets[*numBullets].inMagazine > 0) {
-                bullets[*numBullets].sprite = sfSprite_create();
+            if (bullets[numBullets].sprite != NULL) {
+                sfSprite_setTexture(bullets[numBullets].sprite, bullets->texture, sfTrue);
+                sfSprite_setPosition(bullets[numBullets].sprite, SpawnPosition);
+                bullets[numBullets].velocity = bullets->velocity;
 
-                if (bullets[*numBullets].sprite != NULL) {
-                    sfSprite_setTexture(bullets[*numBullets].sprite, texture, sfTrue);
-                    sfSprite_setPosition(bullets[*numBullets].sprite, position);
-                    bullets[*numBullets].velocity = velocity;
+                sfSprite_setOrigin(bullets[numBullets].sprite, (sfVector2f) { 10, 9 });
+                sfSprite_setRotation(bullets[numBullets].sprite, bullets[numBullets].bulletRotation);
 
-                    sfSprite_setOrigin(bullets[*numBullets].sprite, (sfVector2f) { 10, 9 });
-                    sfSprite_setRotation(bullets[*numBullets].sprite, bulletRotation);
+                sfSprite_move(bullets[numBullets].sprite, bullets[numBullets].velocity);
+                printf("PEW  |  PEW\n");
 
-                    sfSprite_move(bullets[*numBullets].sprite, bullets[*numBullets].velocity);
-                    printf("PEW  |  PEW\n");
-                    (*numBullets)++;
-                    bullets[*numBullets].inMagazine--;
-                }
-                else {
-                    printf("ERREUR #0041 | Bullet sprite creation.\n");
-                }
+                numBullets --;
             }
             else {
-                printf("ERREUR #00042 | No bullets left in the magazine. Wait for reload.\n");
+                printf("ERREUR #0041 | Bullet sprite creation.\n");
             }
         }
         else {
@@ -97,7 +73,7 @@ void BulletCreate(Bullet* bullets, int* numBullets, int maxBullets, sfTexture* t
 
 
 
-void BulletsUpdate(sfRenderWindow* window, sfSprite* ship, Bullet* bullets, int* numBullets, int maxBullets, float bulletRotation) {
+void BulletsUpdate(sfRenderWindow* window, sfSprite* ship, Bullet* bullets) {
     // POSITION
     sfVector2i mousePosition = sfMouse_getPositionRenderWindow(window);
     sfVector2f shipPosition = sfSprite_getPosition(ship);
@@ -106,46 +82,51 @@ void BulletsUpdate(sfRenderWindow* window, sfSprite* ship, Bullet* bullets, int*
     dir.x = mousePosition.x - shipPosition.x;    // direction x
     dir.y = mousePosition.y - shipPosition.y;    // direction y 
 
-    float magnitude = sqrt(dir.x * dir.x + dir.y * dir.y);      // norme
+    float magnitude = (float)sqrt(dir.x * dir.x + dir.y * dir.y);      // norme
 
     if (magnitude > 0) {    // normalisation utile?
-        dir.x /= magnitude;
-        dir.y /= magnitude;
+        (*bullets).velocity.x = (dir.x / magnitude) * dt;
+        (*bullets).velocity.y = (dir.y / magnitude) * dt;
     }
 
+    bullets->bulletRotation = (float)atan2f(dir.y, dir.x) * 180.0f / M_PI;
 
-    bulletRotation = atan2f(dir.y, dir.x) * 180.0f / M_PI;
 
-    if (sfMouse_isButtonPressed(sfMouseLeft)) {
-        sfVector2f bulletPosition = sfSprite_getPosition(ship);
-        sfVector2f bulletVelocity = { dir.x, dir.y };
-        printf("%f  |  %f\n", bulletVelocity.x, bulletVelocity.y);
-
-        BulletCreate(bullets, numBullets, maxBullets, bullets->texture, bulletPosition, bulletVelocity, bulletRotation);
+    if (numBullets <= emptyLoaderBullets) {
+        numBullets = emptyLoaderBullets;
+        sfTime reloadTime = sfClock_getElapsedTime(reloadClock);
+        if (sfTime_asSeconds(reloadTime) > timeToReloadBulletInSecond) {  // reload every 500 ms
+            numBullets = maxLoaderBullets;
+            printf("            \n\nReload\n\n");
+            sfClock_restart(reloadClock);
+        }
+    }
+    else {
+        if (sfMouse_isButtonPressed(sfMouseLeft)) {
+            printf("%f  |  %f \n", bullets->velocity.x, bullets->velocity.y);
+            sfVector2f bulletPosition = sfSprite_getPosition(ship);
+            BulletCreate(bullets, bulletPosition);
+        }
     }
 
-    for (int i = 0; i < *numBullets; i++) {
+    for (int i = maxLoaderBullets; i > numBullets; i--) {
         sfSprite_move(bullets[i].sprite, bullets[i].velocity);
     }
 
-    printf("%d", *numBullets);
-
-    if (*numBullets > maxBullets) {
-        *numBullets = maxBullets;
-    }
+    printf("%d  ", numBullets);
 }
 
 
-void BulletsDisplay(sfRenderWindow* window, Bullet* bullets, int numBullets) {
-    for (int i = 0; i < numBullets; i++) {
+void BulletsDisplay(sfRenderWindow* window, Bullet* bullets){
+    for (int i = maxLoaderBullets; i > numBullets; i--) {
         sfRenderWindow_drawSprite(window, bullets[i].sprite, NULL);
     }
 }
 
 
-void BulletsDestroy(Bullet* bullets, int numBullets, int maxBullets) {
+void BulletsDestroy(Bullet* bullets) {
     if (bullets != NULL) {
-        for (int i = 0; i < numBullets; i++) {
+        for (int i = maxLoaderBullets; i > numBullets; i--) {
             if (bullets[i].sprite != NULL) {
                 sfSprite_destroy(bullets[i].sprite);
                 bullets[i].sprite = NULL;
@@ -154,7 +135,6 @@ void BulletsDestroy(Bullet* bullets, int numBullets, int maxBullets) {
                 sfTexture_destroy(bullets[i].texture);
                 bullets[i].texture = NULL;
             }
-            sfClock_destroy(bullets[i].reloadClock);
         }
     }
     free(bullets);

@@ -8,21 +8,26 @@ typedef struct Bullet{
     sfTexture* texture;
     sfVector2f velocity;
 
-    int inMagazine;
-    int toReload;
-    sfClock* reloadClock;
+    float bulletRotation;
 
 } Bullet;
 
+int emptyLoaderBullets;
+int numBullets;
+int maxLoaderBullets;
+float timeToReloadBulletInSecond;
+
+sfClock* reloadClock;
+
 ///sfTexture* texture, sfVector2f position, sfVector2f velocity
-void BulletInit(Bullet** bullets, int* numBullets, int* maxBullets, float* bulletRotation);
+void BulletInit(Bullet** bullet);
 
-void BulletCreate(Bullet* bullets, int* numBullets, int maxBullets, sfTexture* texture, sfVector2f position, sfVector2f velocity, float bulletRotation);
+void BulletCreate(Bullet* bullets, sfVector2f SpawnPosition);
 
-void BulletsUpdate(sfRenderWindow* window, sfSprite* ship, Bullet* bullets, int* numBullets, int maxBullets, float bulletRotation);
+void BulletsUpdate(sfRenderWindow* window, sfSprite* ship, Bullet* bullets);
 
-void BulletsDisplay(sfRenderWindow* window, Bullet* bullets, int numBullets);
+void BulletsDisplay(sfRenderWindow* window, Bullet* bullets);
 
-void BulletsDestroy(Bullet* bullets, int numBullets, int maxBullets);
+void BulletsDestroy(Bullet* bullets);
 
 #endif /*BULLET_H*/
