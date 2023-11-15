@@ -40,7 +40,7 @@ void PlayerUpdate(sfRenderWindow* window, sfSprite* ship, sfTexture* shipTexture
 
 
     if(sfMouse_isButtonPressed(sfMouseRight)) {
-        speed = 0.20f;
+        speed = 2.0f;
     }
     else {
         // Inertia
@@ -52,7 +52,24 @@ void PlayerUpdate(sfRenderWindow* window, sfSprite* ship, sfTexture* shipTexture
     sfSprite_setOrigin(ship, (sfVector2f) { 10, 9 });
     sfSprite_setRotation(ship, shipRotation);
     
-    sfSprite_move(ship, (sfVector2f) { dir.x * speed * dt, dir.y * speed * dt });
+
+    sfVector2u windowSize = sfRenderWindow_getSize(window);
+
+    if (shipPosition.x > windowSize.x)
+        shipPosition.x = 0;
+    else if (shipPosition.x < 0)
+        shipPosition.x = windowSize.x;
+
+    if (shipPosition.y > windowSize.y)
+        shipPosition.y = 0;
+    else if (shipPosition.y < 0)
+        shipPosition.y = windowSize.y;
+
+
+    shipPosition.x += (dir.x / 10) * dt * speed;
+    shipPosition.y += (dir.y / 10) * dt * speed;
+
+    sfSprite_setPosition(ship, shipPosition);
 }
 
 void PlayerDisplay(sfRenderWindow* window, sfSprite* ship) {
