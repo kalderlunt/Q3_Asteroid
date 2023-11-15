@@ -46,12 +46,13 @@ void PlayerUpdate(sfRenderWindow* window, sfSprite* ship, sfTexture* shipTexture
         // Inertia
         speed *= 0.99f;
     }
-    sfSprite_move(ship, (sfVector2f) { dir.x * speed * dt, dir.y * speed * dt });
 
     shipRotation = atan2f(dir.y, dir.x) * 180.0f / M_PI;
     
     sfSprite_setOrigin(ship, (sfVector2f) { 10, 9 });
     sfSprite_setRotation(ship, shipRotation);
+    
+    sfSprite_move(ship, (sfVector2f) { dir.x * speed * dt, dir.y * speed * dt });
 }
 
 void PlayerDisplay(sfRenderWindow* window, sfSprite* ship) {

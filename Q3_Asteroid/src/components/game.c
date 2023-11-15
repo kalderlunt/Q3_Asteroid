@@ -11,21 +11,21 @@ void GameInit(Game* game) {
 void GameUpdate(Game* game) {
     DeltaTime(game->deltaClock);
     BulletsUpdate(game->window, game->ship, game->bullets);
-    AsteroidsUpdate(game->window, game->ship, game->asteroids);
+    AsteroidsUpdate(game->window, game->ship, &(game->asteroids));
     PlayerUpdate(game->window, game->ship, game->shipTexture, game->shipRotation);
 }
 
 void GameDisplay(Game* game) {
     sfRenderWindow_clear(game->window, sfTransparent);
     BulletsDisplay(game->window, game->bullets);
-    AsteroidsDisplay(game->window, game->asteroids);
+    AsteroidsDisplay(game->window, &(game->asteroids));
     PlayerDisplay(game->window, game->ship);
     WindowDisplay(game->window);
 }
 void DestroyResources(Game* game) {
     DeltaDestroy(&(game->deltaClock));
     BulletsDestroy(game->bullets);
-    AsteroidsDestroy(game->asteroids);
+    AsteroidsDestroy(&(game->asteroids));
     PlayerDestroy(game->ship, game->shipTexture);
     WindowDestroy(game->window);
 }

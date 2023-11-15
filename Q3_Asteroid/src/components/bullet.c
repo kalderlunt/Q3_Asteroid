@@ -40,6 +40,8 @@ void BulletCreate(Bullet* bullets, sfVector2f SpawnPosition) {
     if (bullets != NULL) {
         if (numBullets > emptyLoaderBullets) {
             bullets[numBullets].sprite = sfSprite_create();
+            //(*bullets)[numBullets].texture = sfTexture_createFromFile("asset/Sprites/SpaceWar/cannon.png", NULL);
+
 
             if (bullets[numBullets].sprite != NULL) {
                 sfSprite_setTexture(bullets[numBullets].sprite, bullets->texture, sfTrue);
