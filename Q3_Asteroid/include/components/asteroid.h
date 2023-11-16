@@ -35,11 +35,11 @@ void AsteroidsCreate(sfRenderWindow* window, Asteroid** asteroids);
 
 void CreateSmallAsteroids(sfVector2f position, sfVector2f velocity, Asteroid** asteroids);
 
-int CheckCollision(Bullet* bullets, Asteroid* asteroids);
+int CheckCollision(Bullet** bullets, Asteroid** asteroids);
 
 void AsteroidRemove(int index, Asteroid** asteroids);
 
-void HandleCollisions(Bullet* bullets, Asteroid** asteroids);
+void HandleCollisions(Bullet** bullets, Asteroid** asteroids);
 
 void AsteroidsUpdate(sfRenderWindow* window, sfSprite* ship, Asteroid** asteroids, Bullet** bullets);
 

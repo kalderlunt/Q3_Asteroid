@@ -9,7 +9,7 @@
 void AsteroidsInit(Asteroid** asteroids) {
 
     numAsteroids = 0;
-    maxAsteroids = 10;
+    maxAsteroids = memoryMaxAsteroids;
     memoryMaxAsteroids = MAX_MEMORY_ASTEROIDS;
 
     *asteroids = (Asteroid*)malloc(sizeof(Asteroid) * maxAsteroids);

@@ -1,4 +1,6 @@
 #include "components/game.h"
+#include "components/menu.h"
+
 
 void GameInit(Game* game) {
     DeltaInit(&(game->deltaClock));
@@ -39,7 +41,7 @@ void GameLoop(Game* game) {
             }
         }
 
-        GameUpdate(game);
-        GameDisplay(game);
+        MenuUpdate(game);
+        MenuDisplay(game);
     }
 }
