@@ -1,25 +1,13 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(517,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (SPOYO2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (SPOYO2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   asteroid.c
-E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\src\components\asteroid.c(29,60): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\src\components\asteroid.c(30,60): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\src\components\asteroid.c(35,86): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\src\components\asteroid.c(36,86): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\src\components\asteroid.c(87,52): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\src\components\asteroid.c(92,52): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-  bullet.c
-E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\src\components\bullet.c(92,68): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  deltaTime.c
-  game.c
-E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\src\components\game.c(26,37): warning C4047: 'function': 'sfClock *' differs in levels of indirection from 'sfClock **'
-E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\src\components\game.c(26,18): warning C4024: 'DeltaDestroy': different types for formal and actual parameter 1
-  player.c
-E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\src\components\player.c(22,67): warning C4244: 'initializing': conversion from 'unsigned int' to 'float', possible loss of data
-E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\src\components\player.c(22,106): warning C4244: 'initializing': conversion from 'unsigned int' to 'float', possible loss of data
-E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\src\components\player.c(50,50): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\src\components\player.c(61,36): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\src\components\player.c(66,36): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
-E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\src\components\player.c(34,23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  window.c
-  main.c
-  Generating Code...
-  SPOYO2.vcxproj -> E:\La Horde\B1_Bis\Quetes\Q3_Asteroid\Q3_Asteroid\x64\Debug\Q3_Asteroid.exe
+D:\OneDrive - La Horde\B1-Bis\Quetes\Quete_3\Github_Quete3\Q3_Asteroid\Q3_Asteroid\src\components\asteroid.c(28,60): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
+D:\OneDrive - La Horde\B1-Bis\Quetes\Quete_3\Github_Quete3\Q3_Asteroid\Q3_Asteroid\src\components\asteroid.c(29,60): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
+D:\OneDrive - La Horde\B1-Bis\Quetes\Quete_3\Github_Quete3\Q3_Asteroid\Q3_Asteroid\src\components\asteroid.c(34,86): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\OneDrive - La Horde\B1-Bis\Quetes\Quete_3\Github_Quete3\Q3_Asteroid\Q3_Asteroid\src\components\asteroid.c(35,86): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\OneDrive - La Horde\B1-Bis\Quetes\Quete_3\Github_Quete3\Q3_Asteroid\Q3_Asteroid\src\components\asteroid.c(57,29): warning C4028: formal parameter 1 different from declaration
+D:\OneDrive - La Horde\B1-Bis\Quetes\Quete_3\Github_Quete3\Q3_Asteroid\Q3_Asteroid\src\components\asteroid.c(57,49): warning C4028: formal parameter 2 different from declaration
+D:\OneDrive - La Horde\B1-Bis\Quetes\Quete_3\Github_Quete3\Q3_Asteroid\Q3_Asteroid\src\components\asteroid.c(63,52): warning C4133: 'function': incompatible types - from 'Bullet *' to 'const sfSprite *'
+D:\OneDrive - La Horde\B1-Bis\Quetes\Quete_3\Github_Quete3\Q3_Asteroid\Q3_Asteroid\src\components\asteroid.c(122,32): warning C4028: formal parameter 1 different from declaration
+D:\OneDrive - La Horde\B1-Bis\Quetes\Quete_3\Github_Quete3\Q3_Asteroid\Q3_Asteroid\src\components\asteroid.c(167,52): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
+D:\OneDrive - La Horde\B1-Bis\Quetes\Quete_3\Github_Quete3\Q3_Asteroid\Q3_Asteroid\src\components\asteroid.c(172,52): warning C4244: '=': conversion from 'unsigned int' to 'float', possible loss of data
+  SPOYO2.vcxproj -> D:\OneDrive - La Horde\B1-Bis\Quetes\Quete_3\Github_Quete3\Q3_Asteroid\Q3_Asteroid\x64\Debug\Q3_Asteroid.exe
