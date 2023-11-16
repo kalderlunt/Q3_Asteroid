@@ -1,5 +1,8 @@
 #include <SFML/Graphics.h>
 
+#include "components/bullet.h"
+#include "components/deltaTime.h"
+
 #ifndef ASTEROID
 #define ASTEROID
 #define MAX_MEMORY_ASTEROIDS 1000
@@ -30,7 +33,15 @@ void AsteroidsInit(Asteroid** asteroids);
 
 void AsteroidsCreate(sfRenderWindow* window, Asteroid** asteroids);
 
-void AsteroidsUpdate(sfRenderWindow* window, sfSprite* ship, Asteroid** asteroids);
+void CreateSmallAsteroids(sfVector2f position, sfVector2f velocity, Asteroid** asteroids);
+
+int CheckCollision(Bullet* bullets, Asteroid* asteroids);
+
+void AsteroidRemove(int index, Asteroid** asteroids);
+
+void HandleCollisions(Bullet* bullets, Asteroid** asteroids);
+
+void AsteroidsUpdate(sfRenderWindow* window, sfSprite* ship, Asteroid** asteroids, Bullet** bullets);
 
 void AsteroidsDisplay(sfRenderWindow* window, Asteroid** asteroids);
 

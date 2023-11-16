@@ -3,7 +3,6 @@
 #include <math.h>
 #include "SFML/Window.h"
 #include "components/asteroid.h"
-#include "components/deltaTime.h"
 
 #define M_PI 3.14159265358979323846264338327950288
 
@@ -55,7 +54,64 @@ void AsteroidsCreate(sfRenderWindow* window, Asteroid** asteroids) {
     }
 }
 
-void AsteroidsUpdate(sfRenderWindow* window, sfSprite* ship, Asteroid** asteroids) {
+int CheckCollision(Bullet* bullets, Asteroid* asteroids) {
+    for (int i = 0; i < numBullets; i++) {
+        for (int j = 0; j < numAsteroids; j++) {
+            sfFloatRect bulletBounds = sfSprite_getGlobalBounds(bullets[i].sprite);
+            sfFloatRect asteroidBounds = sfSprite_getGlobalBounds(asteroids[j].sprite);
+
+            if (sfFloatRect_intersects(&bulletBounds, &asteroidBounds, NULL)) {
+                // Collision détectée entre la balle i et l'astéroïde j
+                // marquer la balle et l'astéroïde comme "détruits"
+                // bullets[i] et asteroids[j]
+                // Ou fonction de destruction.
+                return j; // Collision détectée
+            }
+        }
+    }
+    return -1; // Pas de collision détectée
+}
+
+void CreateSmallAsteroids(sfVector2f position, sfVector2f velocity, Asteroid** asteroids) {
+    if (*asteroids != NULL) {
+        // Création des deux nouveaux astéroïdes plus petits
+        (*asteroids)[numAsteroids].sprite = sfSprite_create();
+        (*asteroids)[numAsteroids].texture = sfTexture_createFromFile("asset/Sprites/SpaceWar/small_asteroid.png", NULL);
+        // Configuration premier astéroïde
+        // position, vitesse, taille, etc.
+        // ...
+
+        // Incrémentez numAsteroids pour le premier nouvel astéroïde créé
+        numAsteroids++;
+
+        // Faites de même pour le deuxième nouvel astéroïde plus petit
+        // ...
+    }
+}
+
+void AsteroidRemove(int index, Asteroid** asteroids) {
+    if (*asteroids != NULL && numAsteroids > 0 && index >= 0 && index < numAsteroids) {
+        // Déplacez le dernier astéroïde dans la liste à l'emplacement de l'astéroïde supprimé
+        (*asteroids)[index] = (*asteroids)[numAsteroids - 1];
+        // Diminuez le nombre d'astéroïdes
+        numAsteroids--;
+    }
+}
+
+void HandleCollisions(Bullet* bullets, Asteroid** asteroids) {
+    int asteroidHit = CheckCollision(bullets, asteroids);
+
+    if (asteroidHit) {
+        sfVector2f asteroidPosition = (*asteroids)[asteroidHit].position;
+        sfVector2f asteroidVelocity = (*asteroids)[asteroidHit].velocity;
+
+        CreateSmallAsteroids(asteroidPosition, asteroidVelocity, asteroids);
+
+        AsteroidRemove(asteroidHit, asteroids);
+    }
+}
+
+void AsteroidsUpdate(sfRenderWindow* window, sfSprite* ship, Asteroid** asteroids, Bullet** bullets) {
     
     sfTime elapsed = sfClock_getElapsedTime(respawnClock);
     float seconds = sfTime_asSeconds(elapsed);
@@ -79,6 +135,9 @@ void AsteroidsUpdate(sfRenderWindow* window, sfSprite* ship, Asteroid** asteroid
         if (asteroids[i].position.y < 0 || asteroids[i].position.y > windowSize.y) {
             asteroids[i].velocity.y = -asteroids[i].velocity.y;
         }*/
+
+
+        HandleCollisions(*bullets, *asteroids);
 
 
         if ((*asteroids)[i].position.x > windowSize.x)  
