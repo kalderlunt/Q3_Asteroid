@@ -54,22 +54,44 @@ void AsteroidsCreate(sfRenderWindow* window, Asteroid** asteroids) {
     }
 }
 
-int CheckCollision(Bullet* bullets, Asteroid* asteroids) {
+int CheckCollision(Bullet** bullets, Asteroid** asteroids) {
+
+    sfVector2f distBetween;
+    float dist;
+    float distCollision = 5.0f;
+    
+    sfVector2f shipPosition = sfSprite_getPosition(*bullets);
+
     for (int i = 0; i < numBullets; i++) {
         for (int j = 0; j < numAsteroids; j++) {
-            sfFloatRect bulletBounds = sfSprite_getGlobalBounds(bullets[i].sprite);
-            sfFloatRect asteroidBounds = sfSprite_getGlobalBounds(asteroids[j].sprite);
+            /*
+            sfFloatRect bulletBounds = sfSprite_getGlobalBounds((*bullets)[i].sprite);
+            sfFloatRect asteroidBounds = sfSprite_getGlobalBounds((*asteroids)[j].sprite);
 
             if (sfFloatRect_intersects(&bulletBounds, &asteroidBounds, NULL)) {
                 // Collision détectée entre la balle i et l'astéroïde j
                 // marquer la balle et l'astéroïde comme "détruits"
                 // bullets[i] et asteroids[j]
                 // Ou fonction de destruction.
-                return j; // Collision détectée
+                return j; // Collision detected
+            }
+            */
+            
+            distBetween.x = (*asteroids)[i].position.x - shipPosition.x;
+            distBetween.y = (*asteroids)[i].position.y - shipPosition.y;
+
+            dist = distBetween.x + distBetween.y;
+            
+            if (dist <= distCollision) {
+                printf("CHECCKKK COLLLISION CHECK !");
+                return 1;
             }
         }
     }
-    return -1; // Pas de collision détectée
+
+
+
+    return -1; // any collision detect
 }
 
 void CreateSmallAsteroids(sfVector2f position, sfVector2f velocity, Asteroid** asteroids) {
@@ -93,12 +115,11 @@ void AsteroidRemove(int index, Asteroid** asteroids) {
     if (*asteroids != NULL && numAsteroids > 0 && index >= 0 && index < numAsteroids) {
         // Déplacez le dernier astéroïde dans la liste à l'emplacement de l'astéroïde supprimé
         (*asteroids)[index] = (*asteroids)[numAsteroids - 1];
-        // Diminuez le nombre d'astéroïdes
         numAsteroids--;
     }
 }
 
-void HandleCollisions(Bullet* bullets, Asteroid** asteroids) {
+void HandleCollisions(Bullet** bullets, Asteroid** asteroids) {
     int asteroidHit = CheckCollision(bullets, asteroids);
 
     if (asteroidHit) {
@@ -137,7 +158,7 @@ void AsteroidsUpdate(sfRenderWindow* window, sfSprite* ship, Asteroid** asteroid
         }*/
 
 
-        HandleCollisions(*bullets, *asteroids);
+        //HandleCollisions(*bullets, *asteroids);
 
 
         if ((*asteroids)[i].position.x > windowSize.x)  

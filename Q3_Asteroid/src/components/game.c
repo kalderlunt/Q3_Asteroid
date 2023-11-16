@@ -11,7 +11,7 @@ void GameInit(Game* game) {
 void GameUpdate(Game* game) {
     DeltaTime(game->deltaClock);
     BulletsUpdate(game->window, game->ship, game->bullets);
-    AsteroidsUpdate(game->window, game->ship, &(game->asteroids));
+    AsteroidsUpdate(game->window, game->ship, &(game->asteroids), &(game->bullets));
     PlayerUpdate(game->window, game->ship, game->shipTexture, game->shipRotation);
 }
 
