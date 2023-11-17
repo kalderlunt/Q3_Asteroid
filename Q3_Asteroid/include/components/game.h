@@ -22,7 +22,7 @@ typedef struct Game {
 } Game;
 
 void GameInit(Game* game);
-void GameUpdate(Game* game);
+void GameUpdate(Game* game, sfEvent event);
 void GameDisplay(Game* game);
 void DestroyResources(Game* game);
 

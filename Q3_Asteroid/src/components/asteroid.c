@@ -3,13 +3,14 @@
 #include <math.h>
 #include "SFML/Window.h"
 #include "components/asteroid.h"
+#include "components/deltaTime.h"
 
 #define M_PI 3.14159265358979323846264338327950288
 
 void AsteroidsInit(Asteroid** asteroids) {
 
     numAsteroids = 0;
-    maxAsteroids = memoryMaxAsteroids;
+    maxAsteroids = 10;
     memoryMaxAsteroids = MAX_MEMORY_ASTEROIDS;
 
     *asteroids = (Asteroid*)malloc(sizeof(Asteroid) * maxAsteroids);
@@ -38,7 +39,7 @@ void AsteroidsCreate(sfRenderWindow* window, Asteroid** asteroids) {
             printf("\n\nVELOCITY | x..%f        y..%f\n\n", (*asteroids)[numAsteroids].velocity.x, (*asteroids)[numAsteroids].velocity.y);
 
 
-            
+
             sfSprite_setTexture((*asteroids)[numAsteroids].sprite, (*asteroids)[numAsteroids].texture, sfTrue);
             sfSprite_setOrigin((*asteroids)[numAsteroids].sprite, (sfVector2f) { 62 / 2, 46 / 2 });
             sfSprite_setPosition((*asteroids)[numAsteroids].sprite, (*asteroids)[numAsteroids].position);
@@ -54,86 +55,8 @@ void AsteroidsCreate(sfRenderWindow* window, Asteroid** asteroids) {
     }
 }
 
-int CheckCollision(Bullet** bullets, Asteroid** asteroids) {
-
-    sfVector2f distBetween;
-    float dist;
-    float distCollision = 5.0f;
-    
-    sfVector2f shipPosition = sfSprite_getPosition(*bullets);
-
-    for (int i = 0; i < numBullets; i++) {
-        for (int j = 0; j < numAsteroids; j++) {
-            /*
-            sfFloatRect bulletBounds = sfSprite_getGlobalBounds((*bullets)[i].sprite);
-            sfFloatRect asteroidBounds = sfSprite_getGlobalBounds((*asteroids)[j].sprite);
-
-            if (sfFloatRect_intersects(&bulletBounds, &asteroidBounds, NULL)) {
-                // Collision détectée entre la balle i et l'astéroïde j
-                // marquer la balle et l'astéroïde comme "détruits"
-                // bullets[i] et asteroids[j]
-                // Ou fonction de destruction.
-                return j; // Collision detected
-            }
-            */
-            
-            distBetween.x = (*asteroids)[i].position.x - shipPosition.x;
-            distBetween.y = (*asteroids)[i].position.y - shipPosition.y;
-
-            dist = distBetween.x + distBetween.y;
-            
-            if (dist <= distCollision) {
-                printf("CHECCKKK COLLLISION CHECK !");
-                return 1;
-            }
-        }
-    }
-
-
-
-    return -1; // any collision detect
-}
-
-void CreateSmallAsteroids(sfVector2f position, sfVector2f velocity, Asteroid** asteroids) {
-    if (*asteroids != NULL) {
-        // Création des deux nouveaux astéroïdes plus petits
-        (*asteroids)[numAsteroids].sprite = sfSprite_create();
-        (*asteroids)[numAsteroids].texture = sfTexture_createFromFile("asset/Sprites/SpaceWar/small_asteroid.png", NULL);
-        // Configuration premier astéroïde
-        // position, vitesse, taille, etc.
-        // ...
-
-        // Incrémentez numAsteroids pour le premier nouvel astéroïde créé
-        numAsteroids++;
-
-        // Faites de même pour le deuxième nouvel astéroïde plus petit
-        // ...
-    }
-}
-
-void AsteroidRemove(int index, Asteroid** asteroids) {
-    if (*asteroids != NULL && numAsteroids > 0 && index >= 0 && index < numAsteroids) {
-        // Déplacez le dernier astéroïde dans la liste à l'emplacement de l'astéroïde supprimé
-        (*asteroids)[index] = (*asteroids)[numAsteroids - 1];
-        numAsteroids--;
-    }
-}
-
-void HandleCollisions(Bullet** bullets, Asteroid** asteroids) {
-    int asteroidHit = CheckCollision(bullets, asteroids);
-
-    if (asteroidHit) {
-        sfVector2f asteroidPosition = (*asteroids)[asteroidHit].position;
-        sfVector2f asteroidVelocity = (*asteroids)[asteroidHit].velocity;
-
-        CreateSmallAsteroids(asteroidPosition, asteroidVelocity, asteroids);
-
-        AsteroidRemove(asteroidHit, asteroids);
-    }
-}
-
 void AsteroidsUpdate(sfRenderWindow* window, sfSprite* ship, Asteroid** asteroids, Bullet** bullets) {
-    
+
     sfTime elapsed = sfClock_getElapsedTime(respawnClock);
     float seconds = sfTime_asSeconds(elapsed);
 
@@ -158,10 +81,7 @@ void AsteroidsUpdate(sfRenderWindow* window, sfSprite* ship, Asteroid** asteroid
         }*/
 
 
-        //HandleCollisions(*bullets, *asteroids);
-
-
-        if ((*asteroids)[i].position.x > windowSize.x)  
+        if ((*asteroids)[i].position.x > windowSize.x)
             (*asteroids)[i].position.x = 0;
         else if ((*asteroids)[i].position.x < 0)
             (*asteroids)[i].position.x = windowSize.x;
@@ -182,7 +102,7 @@ void AsteroidsUpdate(sfRenderWindow* window, sfSprite* ship, Asteroid** asteroid
 void AsteroidsDisplay(sfRenderWindow* window, Asteroid** asteroids) {
     for (int i = 0; i < numAsteroids; i++) {
         sfRenderWindow_drawSprite(window, (*asteroids)[i].sprite, NULL);
-    } 
+    }
 }
 
 void AsteroidsDestroy(Asteroid** asteroids) {

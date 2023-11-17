@@ -1,4 +1,5 @@
 #include <SFML/Graphics.h>
+#include <stdbool.h>
 
 #include "components/game.h"
 
@@ -17,9 +18,11 @@ int menuState;
 
 void MenuInit();
 
-void MenuUpdate(Game* game);
+bool isMouseOverText(sfText* text, sfRenderWindow* window);
 
-void MenuDisplay(Game* game);
+void MenuUpdate(sfEvent event, sfRenderWindow* window);
+
+void MenuDisplay(sfRenderWindow* window);
 
 void MenuDestroy();
 
