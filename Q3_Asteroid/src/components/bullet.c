@@ -22,7 +22,7 @@ void BulletInit(Bullet** bullets) {
         exit(EXIT_FAILURE);
     }
 
-    (*bullets)->texture = sfTexture_createFromFile("asset/Sprites/SpaceWar/cannon.png", NULL);
+    (*bullets)->texture = sfTexture_createFromFile("asset/Sprites/SpaceWar/bullet.png", NULL);
     if ((*bullets)->texture == NULL) {
         printf("ERREUR #0043 | Unable to load texture for bullets.\n");
     }
